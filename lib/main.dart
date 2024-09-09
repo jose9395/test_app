@@ -29,7 +29,7 @@ class _LeadListScreenState extends State<LeadListScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late Future<List<Estimate>> _leads;
-  int _selectedIndex = 1; 
+  int _selectedIndex = 1;
 
   @override
   void initState() {
@@ -147,13 +147,13 @@ class _LeadListScreenState extends State<LeadListScreen>
   }
 
   Widget _buildAllPage() {
-    return const  Center(
+    return const Center(
       child: Text("All leads not available", style: TextStyle(fontSize: 18)),
     );
   }
 
   Widget _buildFollowUpPage() {
-    return const  Center(
+    return const Center(
       child:
           Text("No follow-up leads available", style: TextStyle(fontSize: 18)),
     );
@@ -176,7 +176,7 @@ class _LeadListScreenState extends State<LeadListScreen>
     return Center(
       child: Text(
         title,
-        style:const  TextStyle(fontSize: 18),
+        style: const TextStyle(fontSize: 18),
       ),
     );
   }
@@ -196,7 +196,7 @@ class LeadCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(2),
       ),
-      margin:const  EdgeInsets.only(bottom: 7),
+      margin: const EdgeInsets.only(bottom: 7),
       child: Padding(
         padding: EdgeInsets.all(10),
         child: Row(
@@ -210,7 +210,7 @@ class LeadCard extends StatelessWidget {
                 ),
                 Text(
                   DateFormat.d().format(dateTime),
-                  style: const  TextStyle(
+                  style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: Colors.deepOrange),
@@ -221,7 +221,7 @@ class LeadCard extends StatelessWidget {
                 ),
               ],
             ),
-           const  SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,7 +229,7 @@ class LeadCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                   const  Text("Bangalore",
+                    const Text("Bangalore",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
                     Text(
@@ -238,14 +238,14 @@ class LeadCard extends StatelessWidget {
                     )
                   ],
                 ),
-               const  SizedBox(
+                const SizedBox(
                   height: 7,
                 ),
                 Text(
                   lead.movingFrom,
                   softWrap: true,
                   overflow: TextOverflow.visible,
-                  style:const  TextStyle(fontSize: 13, color: Colors.grey),
+                  style: const TextStyle(fontSize: 13, color: Colors.grey),
                 ),
                 const SizedBox(
                   height: 15,
@@ -253,7 +253,7 @@ class LeadCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                   const  Icon(
+                    const Icon(
                       Icons.arrow_downward,
                       color: Colors.deepOrange,
                     ),
@@ -267,13 +267,13 @@ class LeadCard extends StatelessWidget {
                         icon: Icons.directions_car, label: lead.distance),
                   ],
                 ),
-               const  SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-               const  Text("Bangalore",
+                const Text("Bangalore",
                     style:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-               const  SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Text(
@@ -282,7 +282,7 @@ class LeadCard extends StatelessWidget {
                   overflow: TextOverflow.visible,
                   style: TextStyle(fontSize: 13, color: Colors.grey),
                 ),
-               const  SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -302,14 +302,14 @@ class LeadCard extends StatelessWidget {
                                     LeadDetailsPage(lead: lead)),
                           );
                         },
-                        child:const  Text(
+                        child: const Text(
                           'View Details',
                           style:
                               TextStyle(color: Colors.deepOrange, fontSize: 12),
                         ),
                       ),
                     ),
-                   const  SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Expanded(
@@ -327,7 +327,7 @@ class LeadCard extends StatelessWidget {
                     ),
                   ],
                 ),
-              const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
               ],
@@ -343,16 +343,17 @@ class LeadDetail extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  LeadDetail({required this.icon, required this.label});
+ const  LeadDetail({Key? key,required this.icon, required this.label}):super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        
         Icon(icon, color: Colors.deepOrange),
-       const  SizedBox(height: 4),
+        const SizedBox(height: 4),
         Text(label,
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+            style:const  TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
       ],
     );
   }
