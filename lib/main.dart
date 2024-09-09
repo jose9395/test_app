@@ -41,7 +41,7 @@ class _LeadListScreenState extends State<LeadListScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar( 
         title: const Text('Leads',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
         backgroundColor: Colors.white,
@@ -349,7 +349,7 @@ class LeadDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        
+
         Icon(icon, color: Colors.deepOrange),
         const SizedBox(height: 4),
         Text(label,

@@ -3,14 +3,9 @@ import 'package:test_app/model/lead_model.dart';
 import 'package:test_app/views/view_details_page.dart';
 
 Widget buildFloorInfoTab({required Estimate lead}) {
-  String oldInfo = lead.oldHouseAdditionalInfo;
-  if (oldInfo.isEmpty) {
-    oldInfo = "Nil";
-  }
-  String newInfo = lead.newHouseAdditionalInfo;
-  if (newInfo.isEmpty) {
-    newInfo = "Nil";
-  }
+ String oldInfo = lead.oldHouseAdditionalInfo.isEmpty ? "Nil" : lead.oldHouseAdditionalInfo;
+  String newInfo = lead.newHouseAdditionalInfo.isEmpty ? "Nil" : lead.newHouseAdditionalInfo;
+
 
   return Flexible(
     child: Padding(
