@@ -1,10 +1,6 @@
-
-
 import 'package:flutter/material.dart';
-
 import 'package:intl/intl.dart';
 import 'package:test_app/controller/fetch_leads.dart';
-
 import 'package:test_app/model/lead_model.dart';
 import 'package:test_app/views/view_details_page.dart';
 
@@ -33,11 +29,12 @@ class _LeadListScreenState extends State<LeadListScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late Future<List<Estimate>> _leads;
+  int _selectedIndex = 1; 
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 5, vsync: this, initialIndex: 1);
     _leads = fetchLeads();
   }
 
@@ -54,15 +51,23 @@ class _LeadListScreenState extends State<LeadListScreen>
           size: 30,
         ),
         actions: const [
-          Icon(Icons.notifications_outlined, color: Colors.black,size: 24,),
+          Icon(
+            Icons.notifications_outlined,
+            color: Colors.black,
+            size: 24,
+          ),
           SizedBox(width: 12),
           Padding(
             padding: EdgeInsets.only(right: 18),
-            child: Icon(Icons.search_sharp, color: Colors.black,size: 24,),
+            child: Icon(
+              Icons.search_sharp,
+              color: Colors.black,
+              size: 24,
+            ),
           ),
-         
         ],
         bottom: TabBar(
+          // padding: EdgeInsets.only(left: 8),
           controller: _tabController,
           isScrollable: true,
           indicatorColor: Colors.orange,
@@ -78,73 +83,101 @@ class _LeadListScreenState extends State<LeadListScreen>
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+        items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.sort), label: 'Leads'),
+              icon: Icon(Icons.home_outlined), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.sort), label: 'Leads'),
           BottomNavigationBarItem(icon: Icon(Icons.task), label: 'Tasks'),
           BottomNavigationBarItem(icon: Icon(Icons.report), label: 'Reports'),
-           BottomNavigationBarItem(icon: Icon(Icons.more), label: 'more'),
+          BottomNavigationBarItem(icon: Icon(Icons.more), label: 'More'),
         ],
-        currentIndex: 1,
+        currentIndex: _selectedIndex,
         selectedItemColor: Colors.orange,
         unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
-      body: TabBarView(
-        controller: _tabController,
+      body: IndexedStack(
+        index: _selectedIndex,
         children: [
-          _buildAllPage(),
-          FutureBuilder<List<Estimate>>(
-            future: _leads,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text("No leads available"));
-              } else {
-                return ListView.builder(
-                  padding: EdgeInsets.all(10),
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    return LeadCard(lead: snapshot.data![index]);
-                  },
-                );
-              }
-            },
-          ),
-          _buildFollowUpPage(),
-          _buildBookedPage(),
-          _buildInTransitPage(),
+          _buildPlaceholderPage('Home Page'),
+          _buildTabBarView(),
+          _buildPlaceholderPage('Tasks Page'),
+          _buildPlaceholderPage('Reports Page'),
+          _buildPlaceholderPage('More Page'),
         ],
       ),
     );
   }
 
+  Widget _buildTabBarView() {
+    return TabBarView(
+      controller: _tabController,
+      children: [
+        _buildAllPage(),
+        FutureBuilder<List<Estimate>>(
+          future: _leads,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Center(child: Text("No leads available"));
+            } else {
+              return ListView.builder(
+                padding: EdgeInsets.all(10),
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return LeadCard(lead: snapshot.data![index]);
+                },
+              );
+            }
+          },
+        ),
+        _buildFollowUpPage(),
+        _buildBookedPage(),
+        _buildInTransitPage(),
+      ],
+    );
+  }
+
   Widget _buildAllPage() {
-    return Center(
+    return const  Center(
       child: Text("All leads not available", style: TextStyle(fontSize: 18)),
     );
   }
 
   Widget _buildFollowUpPage() {
-    return Center(
+    return const  Center(
       child:
           Text("No follow-up leads available", style: TextStyle(fontSize: 18)),
     );
   }
 
   Widget _buildBookedPage() {
-    return Center(
+    return const Center(
       child: Text("No booked leads available", style: TextStyle(fontSize: 18)),
     );
   }
 
   Widget _buildInTransitPage() {
-    return Center(
+    return const Center(
       child:
           Text("No in-transit leads available", style: TextStyle(fontSize: 18)),
+    );
+  }
+
+  Widget _buildPlaceholderPage(String title) {
+    return Center(
+      child: Text(
+        title,
+        style:const  TextStyle(fontSize: 18),
+      ),
     );
   }
 }
@@ -163,7 +196,7 @@ class LeadCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(2),
       ),
-      margin: EdgeInsets.only(bottom: 7),
+      margin:const  EdgeInsets.only(bottom: 7),
       child: Padding(
         padding: EdgeInsets.all(10),
         child: Row(
@@ -177,10 +210,10 @@ class LeadCard extends StatelessWidget {
                 ),
                 Text(
                   DateFormat.d().format(dateTime),
-                  style: TextStyle(
+                  style: const  TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.orange),
+                      color: Colors.deepOrange),
                 ),
                 Text(
                   DateFormat.Hm().format(dateTime),
@@ -188,7 +221,7 @@ class LeadCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(width: 10),
+           const  SizedBox(width: 10),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,51 +229,51 @@ class LeadCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Bangalore",
+                   const  Text("Bangalore",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
                     Text(
                       lead.estimateId,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
-                SizedBox(
+               const  SizedBox(
                   height: 7,
                 ),
                 Text(
                   lead.movingFrom,
                   softWrap: true,
                   overflow: TextOverflow.visible,
-                  style: TextStyle(fontSize: 13, color: Colors.grey),
+                  style:const  TextStyle(fontSize: 13, color: Colors.grey),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(
+                   const  Icon(
                       Icons.arrow_downward,
-                      color: Colors.orange,
+                      color: Colors.deepOrange,
                     ),
                     LeadDetail(icon: Icons.apartment, label: lead.propertySize),
                     LeadDetail(
                         icon: Icons.shopping_cart, label: lead.totalItems),
                     LeadDetail(
                         icon: Icons.inventory,
-                        label: '${int.parse(lead.totalItems) * 2 + 2}'), // Assuming you have another field
+                        label: '${int.parse(lead.totalItems) * 2 + 2}'),
                     LeadDetail(
                         icon: Icons.directions_car, label: lead.distance),
                   ],
                 ),
-                SizedBox(
+               const  SizedBox(
                   height: 10,
                 ),
-                Text("Bangalore",
+               const  Text("Bangalore",
                     style:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                SizedBox(
+               const  SizedBox(
                   height: 10,
                 ),
                 Text(
@@ -249,7 +282,7 @@ class LeadCard extends StatelessWidget {
                   overflow: TextOverflow.visible,
                   style: TextStyle(fontSize: 13, color: Colors.grey),
                 ),
-                SizedBox(
+               const  SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -258,39 +291,43 @@ class LeadCard extends StatelessWidget {
                     Expanded(
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: Colors.orange),
+                            side: const BorderSide(color: Colors.deepOrange),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(2))),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LeadDetailsPage()),
+                                builder: (context) =>
+                                    LeadDetailsPage(lead: lead)),
                           );
                         },
-                        child: Text(
+                        child:const  Text(
                           'View Details',
-                          style: TextStyle(color: Colors.orange),
+                          style:
+                              TextStyle(color: Colors.deepOrange, fontSize: 12),
                         ),
                       ),
                     ),
-                    SizedBox(width: 10,),
+                   const  SizedBox(
+                      width: 10,
+                    ),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange,
+                            backgroundColor: Colors.deepOrange,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(2))),
-                        child: Text(
+                        child: const Text(
                           'Submit Quote',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
+              const SizedBox(
                   height: 10,
                 ),
               ],
@@ -312,8 +349,8 @@ class LeadDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: Colors.orange),
-        SizedBox(height: 4),
+        Icon(icon, color: Colors.deepOrange),
+       const  SizedBox(height: 4),
         Text(label,
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
       ],
